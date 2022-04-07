@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - adf_publish   
+  workflow_dispatch:
+
+jobs:
+  deployToTest:
+    runs-on: ubuntu-latest
+    name: "This deploys to Test"
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Azure Login
+      uses: Azure/login@v1.4.3
+      with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    
+    - name: Deploy Azure Resource Manager (ARM) Template
+      uses: Azure/arm-deploy@v1.0.6
+      with:
+        # Provide the scope of the deployment. Valid values are: 'resourcegroup', 'managementgroup', 'subscription'
+        scope: resourcegroup
+        # Provide the name of a resource group, only required for resource Group deployments.
+        resourceGroupName: ADF-LT
+        template: ./adf-learningthu/ARMTemplateForFactory.json
+        # Incremental (only add resources to resource group) or Complete (remove extra resources from resource group) or Validate (only validates the template).
+        deploymentMode: Incremental
+        # Specifies the name of the resource group deployment to create.
+        deploymentName: $GITHUB_RUN_ID
+        # Supply deployment parameter values.
+        parameters: factoryName=adf-learningthu2
