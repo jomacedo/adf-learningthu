@@ -1,0 +1,9 @@
+{
+	"name": "adf-learningthu",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "66eaaa4b-572d-4757-ae29-77c0eef096d7",
+		"tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+	}
+}
